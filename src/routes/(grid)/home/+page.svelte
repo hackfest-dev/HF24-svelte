@@ -1,9 +1,10 @@
 <script>
-
-	import { Input } from "$lib/components/ui/input";
+    import { Input } from "$lib/components/ui/input"
+	import Map from "$lib/components/map/Map.svelte";
+    import {PUBLIC_MAPS_API_KEY} from "$env/static/public"
 
 </script>
-<div class=" h-[calc(100vh-3.5rem)] flex flex-col px-16 py-6 gap-6">
+<div class="border-2 border-black h-[calc(100vh-3.5rem)] flex flex-col px-16 py-6 gap-6">
 
     <!-- User input row -->
     <div class="flex justify-between w-full px-8">
@@ -28,10 +29,10 @@
     </div>
     
     <!-- Maps and Results Sections -->
-    <div class=" h-full flex gap-4">
+    <div class="h-full flex gap-4">
 
         <!-- The map -->
-        <div class="bg-white border-2 shadow-xl h-full w-2/3 rounded-lg" ></div>
+        <Map class="h-full w-2/3 rounded-lg overfl" apiKey={PUBLIC_MAPS_API_KEY} ></Map>
         
         <!-- Right side results and stats section -->
         <div class="w-1/3 flex flex-col gap-4">
