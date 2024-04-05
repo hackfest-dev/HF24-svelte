@@ -6,9 +6,9 @@
 </script>
 
 <div class="mr-4 hidden md:flex">
-	<a href="/" class="mr-6 flex items-center">
-		<Icons.logoDark class="rounded-full mr-2 hidden dark:block" />
-		<Icons.logo class="rounded-full mr-2 dark:hidden" />
+	<a href="/" class="mr-10 flex items-center">
+		<Icons.logoDark class="rounded-full mr-4 hidden dark:block" />
+		<Icons.logo class="rounded-full mr-4 dark:hidden" />
 		<span class="hidden text-[15px] font-bold sm:inline-block lg:text-base">
 			{siteConfig.name}
 		</span>

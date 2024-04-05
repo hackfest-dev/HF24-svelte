@@ -7,7 +7,7 @@
 <img
 	src="/freix-dark-150x150.png"
 	alt="Freix Logo"
-	height="36"
-	width="36"
+	height="28"
+	width="28"
 	{...$$restProps}
 />

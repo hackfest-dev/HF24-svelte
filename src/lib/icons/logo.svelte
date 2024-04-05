@@ -4,4 +4,4 @@
 	type $$Props = HTMLAttributes<SVGElement>;
 </script>
 
-<img src="/freix-150x150.png" alt="Freix Logo" height="32" width="32" {...$$restProps} />
+<img src="/freix-150x150.png" alt="Freix Logo" height="28" width="28" {...$$restProps} />
