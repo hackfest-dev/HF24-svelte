@@ -1,7 +1,7 @@
 <script>
 
 	import Map from "$lib/components/map/Map.svelte";
-    import {PUBLIC_API_KEY} from "$env/static/public"
+    import {PUBLIC_MAPS_API_KEY} from "$env/static/public"
 
 </script>
 <div class="border-2 border-black h-[calc(100vh-3.5rem)] flex flex-col px-16 py-6 gap-6">
@@ -32,7 +32,7 @@
     <div class="h-full flex gap-4">
 
         <!-- The map -->
-        <Map class="h-full w-2/3 rounded-lg overfl" apiKey={PUBLIC_API_KEY} ></Map>
+        <Map class="h-full w-2/3 rounded-lg overfl" apiKey={PUBLIC_MAPS_API_KEY} ></Map>
         
         <!-- Right side results and stats section -->
         <div class="w-1/3 flex flex-col gap-4">

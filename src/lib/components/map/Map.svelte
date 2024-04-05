@@ -2,6 +2,7 @@
 	import { type LoaderOptions } from '@googlemaps/js-api-loader';
 	import * as Maps from '@googlemaps/js-api-loader';
 	const { Loader } = Maps;
+	import mapStyles from './map-styles';
 
 	import { onMount } from 'svelte';
 	export let apiKey: string;
@@ -26,7 +27,8 @@
 				minZoom: 2,
 				gestureHandling: 'greedy',
 				streetViewControl: false,
-				...mapOptions
+				styles: mapStyles,
+				...mapOptions,
 			});
 		});
 	});
