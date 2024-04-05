@@ -70,6 +70,9 @@ devDependencies:
   '@types/eslint':
     specifier: 8.56.0
     version: 8.56.0
+  '@types/google.maps':
+    specifier: ^3.55.6
+    version: 3.55.6
   '@types/nodemailer':
     specifier: ^6.4.14
     version: 6.4.14
@@ -1430,6 +1433,10 @@ packages:
       '@types/qs': 6.9.14
       '@types/serve-static': 1.15.7
     dev: false
+
+  /@types/google.maps@3.55.6:
+    resolution: {integrity: sha512-RDtveRsejIi7KRnahz+PE1+Uo+6axr98Susjn/7DxNPPej/T0sMMJfnwm3NcQgvVDWvixWCMOn2Sfukq5UVF2g==}
+    dev: true
 
   /@types/http-errors@2.0.4:
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
