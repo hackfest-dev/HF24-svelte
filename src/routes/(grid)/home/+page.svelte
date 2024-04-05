@@ -1,5 +1,5 @@
 <script>
-
+    import { Input } from "$lib/components/ui/input"
 	import Map from "$lib/components/map/Map.svelte";
     import {PUBLIC_MAPS_API_KEY} from "$env/static/public"
 
@@ -10,21 +10,21 @@
     <div class="flex justify-between w-full px-8">
 
         <!-- Source -->
-        <div class="flex flex-col ">
-            <h2 class="text-center">Source</h2>
-            <input type="text" name="" id="" class="border border-gray-500">
+        <div class="flex flex-col gap-1">
+            <h2 class="text-center text-xl font-semibold">Source</h2>
+            <Input class="h-8 border-2 shadow-lg" placeholder="Choose Country" />
         </div>
 
         <!-- Desination -->
-        <div class="flex flex-col">
-            <h2 class="text-center">Source</h2>
-            <input type="text" name="" id="" class="border border-gray-500">
+        <div class="flex flex-col gap-1">
+            <h2 class="text-center text-xl font-semibold">Destination</h2>
+            <Input class="h-8 border-2 shadow-lg" placeholder="Hey nigga..." />
         </div>
 
         <!-- Product -->
-        <div class="flex flex-col">
-            <h2 class="text-center">Source</h2>
-            <input type="text" name="" id="" class="border border-gray-500">
+        <div class="flex flex-col gap-1">
+            <h2 class="text-center text-xl font-semibold">Product HS Code</h2>
+            <Input class="h-8 border-2 shadow-lg" placeholder="Hey nigga..." />
         </div>
     </div>
     
