@@ -1,8 +1,8 @@
 <script>
-	import {page} from '$app/stores';
+	import { page } from '$app/stores';
 	import { Input } from '$lib/components/ui/input';
 	import Map from '$lib/components/map/Map.svelte';
-	import { PUBLIC_MAPS_API_KEY } from '$env/static/public';
+	import { PUBLIC_GEOCODE_KEY, PUBLIC_MAPS_API_KEY } from '$env/static/public';
 	import * as Card from '$lib/components/ui/card';
 	import * as Select from '$lib/components/ui/select';
 	import { Button } from '$lib/components/ui/button';
@@ -10,16 +10,25 @@
 	import ProfileButton from '$lib/profile/profile-button.svelte';
 	import { ThemeToggleButton } from '$lib/components/theme';
 	import { Separator } from '$lib/components/ui/separator';
-	import * as Table from "$lib/components/ui/table";
+	import * as Table from '$lib/components/ui/table';
 	import ResultTable from './ResultTable.svelte';
-	
-	
-	const url = $page.url;
-	let source_country = {value: url.searchParams.get('source'), label: url.searchParams.get('source')};
-	let dest_country = {value: url.searchParams.get('dest'), label: url.searchParams.get('dest')}
-	let product_hs = url.searchParams.get('product')
 
-	let chosen_country = 'Choose Country ';
+	const url = $page.url;
+	let source_country = {
+		value: url.searchParams.get('source'),
+		label: url.searchParams.get('source')
+	};
+	let dest_country = { value: url.searchParams.get('dest'), label: url.searchParams.get('dest') };
+	let product_hs = url.searchParams.get('product');
+
+	async function getCoordinatesOfCountry(country) {
+		const response = await fetch(
+			`https://geocode.maps.co/search?q=${country}&api_key=${PUBLIC_GEOCODE_KEY}`
+		);
+		const theJson = await response.json();
+		console.log(theJson)
+	}
+
 	async function testGemini() {
 		const response = await fetch('/api/gemini', {
 			method: 'POST',
@@ -33,7 +42,6 @@
 		const total = await response.json();
 		console.log(total);
 	}
-
 
 	const countries = [
 		'Japan',
@@ -111,14 +119,23 @@
 				<Input bind:value={product_hs} class="h-8 border-2" placeholder="Enter HS Code" />
 			</div>
 
-			<Button class="h-14 w-28 rounded-lg" on:click={testGemini}>Analyze</Button>
+			<Button
+				class="h-14 w-28 rounded-lg"
+				on:click={() => {
+					testGemini();
+				}}>Analyze</Button
+			>
 		</Card.Root>
 	</div>
 
 	<!-- Maps and Results Sections -->
 	<div class="flex h-full gap-4">
 		<!-- The map -->
-		<Map class="h-full w-2/3 rounded-lg border shadow-lg" apiKey={PUBLIC_MAPS_API_KEY}></Map>
+		<Map
+			pathCoordinates = {[{lat: 22.351,lng: 78.667},{lat: 46.85,lng: 103.284},{lat: 36.2,lng: 138.25}]}
+			class="h-full w-2/3 rounded-lg border shadow-lg"
+			apiKey={PUBLIC_MAPS_API_KEY}
+		></Map>
 
 		<!-- Right side results and stats section -->
 		<div class="flex w-1/3 flex-col gap-4">
