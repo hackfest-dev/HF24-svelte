@@ -1,24 +1,27 @@
 import supabase from '$lib/db/db';
 import { geminiFetchInsights } from '$lib/gemini/gemini';
+import { geminiFetchRoutes } from '$lib/gemini/gemini2';
 import { json } from '@sveltejs/kit';
 import CountryCords from '../../(nonav)/features/countryCords.json';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const dataMain = await request.json();
-	// console.log(data);
+	const data = await request.json();
+	console.log('Data', data);
 
-	const gem = await geminiFetchInsights(dataMain.source, dataMain.dest, dataMain.product);
+	let [gem, gem2] = await Promise.all([
+		geminiFetchInsights(data.source, data.dest, data.product),
+		geminiFetchRoutes(data.source, data.dest, data.product)
+	]);
 
-	console.log(dataMain);
-	const { data } = await supabase
+	const supa = await supabase
 		.from('Data')
 		.select('*')
-		.eq('country1', dataMain.source)
-		.eq('country2', dataMain.dest)
-		.eq('category', dataMain.product);
+		.eq('country1', data.source)
+		.eq('country2', data.dest)
+		.eq('category', data.product);
 
-	// console.log(data);
+	console.log('Supa', supa);
 
 	const pathCoordinatesArray = [[{}]];
 
@@ -31,12 +34,28 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 	});
 
+	for (let route in gem2) {
+		let arr = gem2[route];
+		let new_arr = [];
+		for (let i = 0; i < arr.length; i++) {
+			CountryCords.forEach((ele) => {
+				if (ele.name === arr[i]) {
+					new_arr.push({ lat: ele.lat, lng: ele.lng });
+				}
+			});
+		}
+		pathCoordinatesArray.push(new_arr);
+		console.log(route, gem2[route]);
+	}
+
+	console.log(pathCoordinatesArray);
+
 	return json({
-		source: dataMain.source,
-		dest: dataMain.dest,
-		product: dataMain.product,
+		source: data.source,
+		dest: data.dest,
+		product: data.product,
 		gem: gem,
 		pathCoordinatesArray: pathCoordinatesArray,
-		data: data
+		data: supa.data
 	});
 };
