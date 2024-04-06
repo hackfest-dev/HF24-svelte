@@ -91,7 +91,7 @@
 			<Select.Root
 				selected={selectedSource}
 				onSelectedChange={(v) => {
-					v && ($formData.source = v.value);
+					v && ($formData.source = v.value) && (data.data.source = v.value);
 				}}
 			>
 				<Select.Trigger {...attrs} class="h-8 min-w-40 border-2">
@@ -119,7 +119,7 @@
 			<Select.Root
 				selected={selectedDestination}
 				onSelectedChange={(v) => {
-					v && ($formData.dest = v.value);
+					v && ($formData.dest = v.value) && (data.data.dest = v.value);
 				}}
 			>
 				<Select.Trigger {...attrs} class="h-8 min-w-40 border-2">
