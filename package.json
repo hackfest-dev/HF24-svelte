@@ -53,6 +53,7 @@
 		"mini-svg-data-uri": "^1.4.4",
 		"nodemailer": "^6.9.13",
 		"radix-icons-svelte": "^1.2.1",
+		"svelte-markdown": "^0.4.1",
 		"svelte-motion": "^0.12.2",
 		"sveltekit-superforms": "^2.12.2",
 		"tailwind-merge": "^2.2.2",

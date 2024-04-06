@@ -1,6 +1,8 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 
+	import SvelteMarkdown from 'svelte-markdown';
+	import { Separator } from '$lib/components/ui/separator';
 	import UserForm from './user-form.svelte';
 	import UserMenu from './user-menu.svelte';
 	import ResultTable from './ResultTable.svelte';
@@ -45,41 +47,54 @@
 		></Map>
 
 		<!-- Right side results and stats section -->
-			<Card.Root class="h-full overflow-y-scroll rounded-lg shadow-xl flex w-1/3 flex-col gap-4 ">
-				<Card.Header>
-					<Card.Title>Similar Transactions</Card.Title>
-					<Card.Description
-						>Here are some of the matching transactions from country A to country B of the product
-						category X</Card.Description
-					>
-				</Card.Header>
-				<Card.Content>
-					<p>Content</p>
-					<p>Content</p>
-					<p>Content</p>
-				</Card.Content>
-				<Card.Header>
-					<Card.Title>AI Analysis</Card.Title>
-					<Card.Description
-						>Analysis of shipping products from country A to country B using AI</Card.Description
-					>
-				</Card.Header>
-				<Card.Content>
-					<p>{JSON.stringify(data.form.data?.['gem'])}</p>
-				</Card.Content>
-				<Card.Header>
-					<Card.Title>Charges and Taxes on import</Card.Title>
-					<Card.Description
-						>Estimate of various taxes and duties in shipping your product from country A to country
-						B</Card.Description
-					>
-				</Card.Header>
-				<Card.Content>
-					<ResultTable formData={data.form.data} />
-				</Card.Content>
-				<!-- <Card.Footer>
+		<Card.Root class="flex h-full w-1/3 flex-col gap-4 overflow-y-scroll rounded-lg shadow-xl ">
+			<Card.Header>
+				<Card.Title>AI Analysis</Card.Title>
+				{#if data?.form?.data?.gem}
+					<Card.Description class="pt-8 text-foreground">
+						<SvelteMarkdown source={data?.form?.data?.gem ?? ``} />
+					</Card.Description>
+				{:else}
+					<Card.Description>
+						Analysis of shipping products from {data?.form?.data.source ?? 'country A'} to {data
+							?.form?.data.dest ?? 'country B'} using AI
+					</Card.Description>
+				{/if}
+			</Card.Header>
+
+			<Separator />
+
+			<Card.Header>
+				<Card.Title>Charges and Taxes on import</Card.Title>
+				<Card.Description>
+					Estimate of various taxes and duties in shipping your product from {data?.form?.data
+						.source ?? 'country A'} to {data?.form?.data.dest ?? 'country B'}
+				</Card.Description>
+				{#if data?.form?.data?.gem}
+					<Card.Content>
+						<ResultTable formData={data.form.data} />
+					</Card.Content>
+				{/if}
+			</Card.Header>
+
+			<Separator />
+
+			<Card.Header>
+				<Card.Title>Similar Transactions</Card.Title>
+				<Card.Description>
+					Here are some of the matching transactions from {data?.form?.data.source ?? 'country A'} to
+					{data?.form?.data.dest ?? 'country B'} of the product category X
+				</Card.Description>
+			</Card.Header>
+			<!-- <Card.Content>
+				<p>Content</p>
+				<p>Content</p>
+				<p>Content</p>
+			</Card.Content> -->
+
+			<!-- <Card.Footer>
 					<p>Card Footer</p>
 				</Card.Footer> -->
-			</Card.Root>
+		</Card.Root>
 	</div>
 </div>
