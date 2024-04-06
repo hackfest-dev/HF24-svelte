@@ -11,20 +11,21 @@ export const geminiFetchInsights = async (
 	const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 	let prompt =
-		'Person A would like to know the current shipping status and estimated taxes and delivery date for buying product of category' +
-		product +
-		'from ' +
+		'I want to know the status of buying small products from the country ' +
 		source +
-		'to ' +
+		'. I currently live in ' +
 		dest +
-		'. Please provide relevant information in 100 words or less to help the person make an informed decision.';
+		'. I want to buy ' +
+		product +
+		'.' +
+		'inform me the total shipping cost and total taxes and duties that I might encounter. Also list the different ways of say air or sea that i can use. Say all of this in 120 words or less';
 
 	// prompt =
 	// 	'Please return values only in this format for upcoming queries : {"total_shipping_cost":"cost","total_taxes_and_duties":"cost"}' +
 	// 	prompt;
 
 	const result = await model.generateContent(prompt);
-	console.log(result);
+	// console.log(result);
 
 	const response = result.response;
 	return response.text();
