@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Separator } from '$lib/components/ui/separator';
-
 	import { Icons } from '$lib/icons';
 	import ProfileButton from '$lib/profile/profile-button.svelte';
 	import { ThemeToggleButton } from '$lib/components/theme';

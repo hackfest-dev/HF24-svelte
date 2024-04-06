@@ -9,6 +9,8 @@
 	import { browser } from '$app/environment';
 	import SuperDebug from 'sveltekit-superforms';
 	import { Button } from '$lib/components/ui/button';
+	import CountryCords from './countryCords.json';
+	import { CloudCog } from 'lucide-svelte';
 
 	// import { page } from '$app/stores';
 	// const url = $page.url;
@@ -27,28 +29,7 @@
 
 	const { form: formData, enhance } = form;
 
-	const countries = [
-		'Japan',
-		'France',
-		'Canada',
-		'Brazil',
-		'Australia',
-		'Italy',
-		'Germany',
-		'India',
-		'United Kingdom',
-		'Mexico',
-		'Spain',
-		'Argentina',
-		'Indonesia',
-		'South Africa',
-		'Nigeria',
-		'Russia',
-		'Kenya',
-		'Colombia',
-		'Thailand',
-		'Egypt'
-	];
+	const countries = CountryCords.map((ele)=>ele.name)
 
 	$: selectedSource = $formData.source
 		? {
@@ -160,7 +141,7 @@
 	<!-- Product -->
 	<Form.Field {form} name="product" class="flex flex-col gap-1">
 		<Form.Control let:attrs>
-			<Form.Label class="text-xl font-semibold">Product (HS Code)</Form.Label>
+			<Form.Label class="text-xl font-semibold">Product</Form.Label>
 			<Input
 				{...attrs}
 				bind:value={$formData.product}
