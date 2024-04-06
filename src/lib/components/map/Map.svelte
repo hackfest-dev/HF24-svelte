@@ -11,7 +11,22 @@
 	let map: google.maps.Map;
 	let container: HTMLElement;
 
+	async function testGemini() {
+		const response = await fetch('/api/gemini', {
+			method: 'POST',
+			body: JSON.stringify({
+				prompt: '{"source":"India","destination":"US","HSCode":"7326"}'
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		const total = await response.json();
+		console.log(total);
+	}
+
 	onMount(() => {
+		// testGemini();
 		const loader = new Loader({
 			version: 'quarterly',
 			...loaderOptions,
