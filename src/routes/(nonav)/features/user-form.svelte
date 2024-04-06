@@ -8,6 +8,7 @@
 
 	import { browser } from '$app/environment';
 	import SuperDebug from 'sveltekit-superforms';
+	import { Button } from '$lib/components/ui/button';
 
 	// import { page } from '$app/stores';
 	// const url = $page.url;
@@ -63,20 +64,44 @@
 			}
 		: undefined;
 
-	// $: selectedProduct = $formData.product
-	// 	? {
-	// 			label: $formData.product,
-	// 			value: $formData.product
-	// 		}
-	// 	: undefined;
+	$: selectedProduct = $formData.product
+		? {
+				label: $formData.product,
+				value: $formData.product
+			}
+		: undefined;
+
+	function handleSubmit() {
+		// console.log('Form Data', $formData);
+
+		fetch('/api/submit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify($formData)
+		})
+			.then((response) => {
+				if (response.ok) {
+					return response.json(); // This line retrieves the JSON data from the response
+				} else {
+					console.error('Form submission failed');
+				}
+			})
+			.then((responseData) => {
+				// console.log('response data', responseData); // Use the JSON data here
+				// console.log('data object', data);
+
+				data.data = responseData;
+			})
+			.catch((error) => console.error('Error submitting form:', error));
+
+		console.log('Submitted');
+	}
 </script>
 
-<form
-	method="POST"
-	use:enhance
-	class="flex items-center justify-between rounded-lg p-8 px-20 shadow-lg"
->
-	<!-- Source -->
+<!-- Source -->
+<div class="flex items-center justify-between rounded-lg p-8 px-20 shadow-lg">
 	<Form.Field {form} name="source" class="flex flex-col gap-1">
 		<Form.Control let:attrs>
 			<Form.Label class="text-xl font-semibold">Source</Form.Label>
@@ -146,8 +171,8 @@
 		<Form.FieldErrors />
 	</Form.Field>
 
-	<Form.Button class="h-14 w-28 rounded-lg">Submit</Form.Button>
-</form>
+	<Button class="h-14 w-28 rounded-lg" on:click={handleSubmit}>Submit</Button>
+</div>
 
 <!-- {#if browser}
 	<SuperDebug data={$formData} />

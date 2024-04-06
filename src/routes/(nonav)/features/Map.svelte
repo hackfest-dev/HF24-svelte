@@ -6,33 +6,23 @@
 	export let apiKey: string;
 	export let loaderOptions: Omit<LoaderOptions, 'apiKey'> | null = null;
 	export let mapOptions: google.maps.MapOptions | null = null;
+	export let data: {} = {};
+
+	let pathCoordinates: { lat: number; lng: number }[] = [];
+
+	$: pathCoordinates = data?.pathCoordinates ?? [];
+	// $: console.log('Path Coordinates', pathCoordinates);
+
 	const { Loader } = Maps;
+
+	let loader: Maps.Loader;
 
 	let map: google.maps.Map;
 	let container: HTMLElement;
 
-	async function testGemini() {
-		const response = await fetch('/api/gemini', {
-			method: 'POST',
-			body: JSON.stringify({
-				prompt: '{"source":"India","destination":"US","HSCode":"7326"}'
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-		const total = await response.json();
-		console.log(total);
-	}
+	let mounted = false;
 
-	onMount(() => {
-		// testGemini();
-		const loader = new Loader({
-			version: 'quarterly',
-			...loaderOptions,
-			apiKey
-		});
-
+	async function renderMap() {
 		loader.importLibrary('maps').then(() => {
 			map = new google.maps.Map(container, {
 				center: { lat: 23.37, lng: 82.5 },
@@ -43,7 +33,38 @@
 				styles: mapStyles,
 				...mapOptions
 			});
+
+			if (pathCoordinates != null) {
+				var createPath = async (pathCoordinates: { lat: number; lng: number }[]) => {
+					const flightPath = new google.maps.Polyline({
+						path: pathCoordinates,
+						geodesic: true,
+						strokeColor: '#FF0000',
+						strokeOpacity: 1.0,
+						strokeWeight: 2
+					});
+
+					flightPath.setMap(map);
+				};
+
+				createPath(pathCoordinates);
+			}
 		});
+	}
+
+	$: {
+		mounted && pathCoordinates && renderMap();
+	}
+
+	onMount(() => {
+		mounted = true;
+		loader = new Loader({
+			version: 'quarterly',
+			...loaderOptions,
+			apiKey
+		});
+
+		renderMap();
 	});
 </script>
 

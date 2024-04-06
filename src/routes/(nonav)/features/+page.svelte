@@ -30,7 +30,7 @@
 
 		<Card.Root class="w-full">
 			<!-- <Card.Content class="w-full"> -->
-			<UserForm data={data.form} />
+			<UserForm bind:data={data.form} />
 			<!-- </Card.Content> -->
 		</Card.Root>
 	</div>
@@ -38,25 +38,50 @@
 	<!-- Maps and Results Sections -->
 	<div class="flex h-full gap-4">
 		<!-- The map -->
-		<Map class="h-full w-2/3 rounded-lg border shadow-lg" apiKey={PUBLIC_MAPS_API_KEY}></Map>
+		<Map
+			class="h-4/5 w-2/3 rounded-lg border shadow-lg"
+			apiKey={PUBLIC_MAPS_API_KEY}
+			bind:data={data.form.data}
+		></Map>
 
 		<!-- Right side results and stats section -->
 		<div class="flex w-1/3 flex-col gap-4">
-			<Card.Root class="h-2/3 w-full rounded-lg shadow-xl">
+			<Card.Root class="w-full rounded-lg shadow-xl">
 				<Card.Header>
-					<Card.Title>Card Title</Card.Title>
-					<Card.Description>Card Description</Card.Description>
+					<Card.Title>Similar Transactions</Card.Title>
+					<Card.Description
+						>Here are some of the matching transactions from country A to country B of the product
+						category X</Card.Description
+					>
 				</Card.Header>
 				<Card.Content>
-					<p>Card Content</p>
+					<p>Content</p>
+					<p>Content</p>
+					<p>Content</p>
 				</Card.Content>
-				<Card.Footer>
+				<Card.Header>
+					<Card.Title>AI Analysis</Card.Title>
+					<Card.Description
+						>Analysis of shipping products from country A to country B using AI</Card.Description
+					>
+				</Card.Header>
+				<Card.Content>
+					<p>{JSON.stringify(data.form.data?.['gem'])}</p>
+				</Card.Content>
+				<!-- <Card.Footer>
 					<p>Card Footer</p>
-				</Card.Footer>
+				</Card.Footer> -->
 			</Card.Root>
 
-			<Card.Root class="h-1/3 w-full rounded-lg shadow-xl">
-				<Card.Content class=" h-full overflow-y-scroll">
+			<Card.Root class="w-full rounded-lg shadow-xl">
+				<Card.Header>
+					<Card.Title>Charges and Taxes on import</Card.Title>
+					<Card.Description
+						>Estimate of various taxes and duties in shipping your product from country A to country
+						B</Card.Description
+					>
+				</Card.Header>
+				<Card.Content class="h-full overflow-y-scroll">
 					<ResultTable />
 				</Card.Content>
 			</Card.Root>
