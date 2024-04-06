@@ -1,4 +1,5 @@
 <script>
+	import {page} from '$app/stores';
 	import { Input } from '$lib/components/ui/input';
 	import Map from '$lib/components/map/Map.svelte';
 	import { PUBLIC_MAPS_API_KEY } from '$env/static/public';
@@ -6,13 +7,31 @@
 	import * as Select from '$lib/components/ui/select';
 	import { Button } from '$lib/components/ui/button';
 	import { Icons } from '$lib/icons';
-	import { siteConfig } from '$lib/config/site';
 	import ProfileButton from '$lib/profile/profile-button.svelte';
 	import { ThemeToggleSwitch } from '$lib/components/theme';
-	import ThemeToggleButton from '$lib/components/theme/ThemeToggleButton.svelte';
 	import { Separator } from '$lib/components/ui/separator';
+	import * as Dialog from "$lib/components/ui/dialog"
+	
+	const url = $page.url;
+	let source_country = {value: url.searchParams.get('source'), label: url.searchParams.get('source')};
+	let dest_country = {value: url.searchParams.get('dest'), label: url.searchParams.get('dest')}
+	let product_hs = url.searchParams.get('product')
 
 	let chosen_country = 'Choose Country ';
+	async function testGemini() {
+		const response = await fetch('/api/gemini', {
+			method: 'POST',
+			body: JSON.stringify({
+				prompt: `{"source": "${source_country}","destination":"${dest_country}","HSCode":"${product_hs}"}`
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		const total = await response.json();
+		console.log(total);
+	}
+
 
 	const countries = [
 		'Japan',
@@ -57,7 +76,7 @@
 			<!-- Source -->
 			<div class="flex flex-col gap-1">
 				<h2 class="text-xl font-semibold">Source</h2>
-				<Select.Root>
+				<Select.Root bind:selected={source_country}>
 					<Select.Trigger class="h-8 min-w-40 border-2">
 						<Select.Value placeholder="Choose Country" />
 					</Select.Trigger>
@@ -72,7 +91,7 @@
 			<!-- Desination -->
 			<div class="flex flex-col gap-1">
 				<h2 class="text-xl font-semibold">Destination</h2>
-				<Select.Root>
+				<Select.Root bind:selected={dest_country}>
 					<Select.Trigger class="h-8 min-w-40 border-2">
 						<Select.Value placeholder="Choose Country" />
 					</Select.Trigger>
@@ -87,10 +106,10 @@
 			<!-- Product -->
 			<div class="flex flex-col gap-1">
 				<h2 class="text-xl font-semibold">Product HS Code</h2>
-				<Input class="h-8 border-2" placeholder="Enter HS Code" />
+				<Input bind:value={product_hs} class="h-8 border-2" placeholder="Enter HS Code" />
 			</div>
 
-			<Button class="h-14 w-28 rounded-lg">Analyze</Button>
+			<Button class="h-14 w-28 rounded-lg" on:click={testGemini}>Analyze</Button>
 		</Card.Root>
 	</div>
 
