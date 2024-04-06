@@ -1,11 +1,17 @@
-import type { PageServerLoad, Actions } from './$types';
+import supabase from '$lib/db/db';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import type { PageServerLoad } from './$types';
 import { formSchema } from './schema';
-import { error, fail, redirect } from '@sveltejs/kit';
-import { geminiFetchInsights } from '$lib/gemini/gemini';
 
 export const load = (async () => {
+	const { data, error } = await supabase.from('Data').select().eq('country1', 'Afghanistan');
+	if (error) {
+		console.error(error);
+		return;
+	}
+	console.log(data);
+	console.log('Hello');
 	return {
 		form: await superValidate(zod(formSchema))
 	};
