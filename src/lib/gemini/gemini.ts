@@ -27,10 +27,5 @@ export const geminiFetchInsights = async (
 	console.log(result);
 
 	const response = result.response;
-	const text = response.text();
-	console.log(text);
-
-	// return json({
-	// 	data: text
-	// });
+	return response.text();
 };
