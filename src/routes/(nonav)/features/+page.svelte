@@ -75,7 +75,7 @@
 					>
 				</Card.Header>
 				<Card.Content>
-					<ResultTable />
+					<ResultTable formData={data.form.data} />
 				</Card.Content>
 				<!-- <Card.Footer>
 					<p>Card Footer</p>

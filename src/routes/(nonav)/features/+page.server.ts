@@ -5,13 +5,13 @@ import type { PageServerLoad } from './$types';
 import { formSchema } from './schema';
 
 export const load = (async () => {
-	const { data, error } = await supabase.from('Data').select().eq('country1', 'Afghanistan');
-	if (error) {
-		console.error(error);
-		return;
-	}
-	console.log(data);
-	console.log('Hello');
+	// const { data, error } = await supabase.from('Data').select().eq('country2', 'India');
+	// if (error) {
+	// 	console.error(error);
+	// 	return;
+	// }
+	// console.log(data);
+	// console.log('Hello');
 	return {
 		form: await superValidate(zod(formSchema))
 	};
