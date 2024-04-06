@@ -1,37 +1,130 @@
-<script lang="ts">
+<script>
+	import { page } from '$app/stores';
+	import { Input } from '$lib/components/ui/input';
+	import Map from '$lib/components/map/Map.svelte';
+	import { PUBLIC_GEOCODE_KEY, PUBLIC_MAPS_API_KEY } from '$env/static/public';
 	import * as Card from '$lib/components/ui/card';
-
-	import UserForm from './user-form.svelte';
-	import UserMenu from './user-menu.svelte';
+	import * as Select from '$lib/components/ui/select';
+	import { Button } from '$lib/components/ui/button';
+	import { Icons } from '$lib/icons';
+	import ProfileButton from '$lib/profile/profile-button.svelte';
+	import { ThemeToggleButton } from '$lib/components/theme';
+	import { Separator } from '$lib/components/ui/separator';
+	import * as Table from '$lib/components/ui/table';
 	import ResultTable from './ResultTable.svelte';
-	import Map from './Map.svelte';
 
-	import { PUBLIC_MAPS_API_KEY } from '$env/static/public';
+	const url = $page.url;
+	let source_country = {
+		value: url.searchParams.get('source'),
+		label: url.searchParams.get('source')
+	};
+	let dest_country = { value: url.searchParams.get('dest'), label: url.searchParams.get('dest') };
+	let product_hs = url.searchParams.get('product');
 
-	import type { PageData } from './$types';
-	export let data: PageData;
+	async function getCoordinatesOfCountry(country) {
+		const response = await fetch(
+			`https://geocode.maps.co/search?q=${country}&api_key=${PUBLIC_GEOCODE_KEY}`
+		);
+		const theJson = await response.json();
+		console.log(theJson)
+	}
 
-	/* ******************************************************** */
+	async function testGemini() {
+		const response = await fetch('/api/gemini', {
+			method: 'POST',
+			body: JSON.stringify({
+				prompt: `{"source": "${source_country}","destination":"${dest_country}","HSCode":"${product_hs}"}`
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		const total = await response.json();
+		console.log(total);
+	}
 
-	// import { page } from '$app/stores';
-	// const url = $page.url;
-	// let source_country = {
-	// 	value: url.searchParams.get('source'),
-	// 	label: url.searchParams.get('source')
-	// };
-	// let dest_country = { value: url.searchParams.get('dest'), label: url.searchParams.get('dest') };
-	// let product_hs = url.searchParams.get('product');
+	const countries = [
+		'Japan',
+		'France',
+		'Canada',
+		'Brazil',
+		'Australia',
+		'Italy',
+		'Germany',
+		'India',
+		'United Kingdom',
+		'Mexico',
+		'Spain',
+		'Argentina',
+		'Indonesia',
+		'South Africa',
+		'Nigeria',
+		'Russia',
+		'Kenya',
+		'Colombia',
+		'Thailand',
+		'Egypt'
+	];
 </script>
 
 <div class="flex h-screen flex-col gap-6 px-16 py-6">
-	<!-- Header Section -->
-	<div class="flex items-center gap-6">
-		<UserMenu></UserMenu>
+	<!-- User input row -->
+	<div class=" flex items-center gap-6">
+		<Card.Root class="h-full w-fit shadow-lg">
+			<Card.Content class="flex h-full flex-col items-center justify-between px-2 pb-2 ">
+				<a href="/" class="my-2">
+					<Icons.logoDark class="hidden rounded-full dark:block" />
+					<Icons.logo class="rounded-full dark:hidden" />
+				</a>
+				<Separator />
+				<ProfileButton />
+				<ThemeToggleButton />
+			</Card.Content>
+		</Card.Root>
 
-		<Card.Root class="w-full">
-			<!-- <Card.Content class="w-full"> -->
-			<UserForm data={data.form} />
-			<!-- </Card.Content> -->
+		<Card.Root class="flex w-full items-center justify-between rounded-lg p-8 px-20 shadow-lg">
+			<!-- Source -->
+			<div class="flex flex-col gap-1">
+				<h2 class="text-xl font-semibold">Source</h2>
+				<Select.Root bind:selected={source_country}>
+					<Select.Trigger class="h-8 min-w-40 border-2">
+						<Select.Value placeholder="Choose Country" />
+					</Select.Trigger>
+					<Select.Content class="h-[75dvh] overflow-y-scroll">
+						{#each countries as country}
+							<Select.Item value={country}>{country}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+			</div>
+
+			<!-- Desination -->
+			<div class="flex flex-col gap-1">
+				<h2 class="text-xl font-semibold">Destination</h2>
+				<Select.Root bind:selected={dest_country}>
+					<Select.Trigger class="h-8 min-w-40 border-2">
+						<Select.Value placeholder="Choose Country" />
+					</Select.Trigger>
+					<Select.Content class="h-[75dvh] overflow-y-scroll">
+						{#each countries as country}
+							<Select.Item value={country}>{country}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+			</div>
+
+			<!-- Product -->
+			<div class="flex flex-col gap-1">
+				<h2 class="text-xl font-semibold">Product HS Code</h2>
+				<Input bind:value={product_hs} class="h-8 border-2" placeholder="Enter HS Code" />
+			</div>
+
+			<Button
+				class="h-14 w-28 rounded-lg"
+				on:click={() => {
+					testGemini();
+				}}>Analyze</Button
+			>
 		</Card.Root>
 	</div>
 
