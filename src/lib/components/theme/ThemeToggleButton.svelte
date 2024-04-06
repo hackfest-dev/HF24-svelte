@@ -83,6 +83,7 @@
 		transition: border-color 0.25s;
 		@apply flex aspect-square items-center rounded-lg p-1.5 text-sm;
 		@apply border border-border;
+		@apply rounded-full;
 	}
 
 	button:hover {

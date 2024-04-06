@@ -8,8 +8,7 @@
 	import { Icons } from '$lib/icons';
 	import { siteConfig } from '$lib/config/site';
 	import ProfileButton from '$lib/profile/profile-button.svelte';
-	import { ThemeToggleSwitch } from '$lib/components/theme';
-	import ThemeToggleButton from '$lib/components/theme/ThemeToggleButton.svelte';
+	import { ThemeToggleButton } from '$lib/components/theme';
 	import { Separator } from '$lib/components/ui/separator';
 
 	let chosen_country = 'Choose Country ';
@@ -49,7 +48,7 @@
 				</a>
 				<Separator />
 				<ProfileButton />
-				<ThemeToggleSwitch />
+				<ThemeToggleButton />
 			</Card.Content>
 		</Card.Root>
 
