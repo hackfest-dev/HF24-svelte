@@ -10,7 +10,9 @@
 	import ProfileButton from '$lib/profile/profile-button.svelte';
 	import { ThemeToggleButton } from '$lib/components/theme';
 	import { Separator } from '$lib/components/ui/separator';
-	import * as Dialog from "$lib/components/ui/dialog"
+	import * as Table from "$lib/components/ui/table";
+	import ResultTable from './ResultTable.svelte';
+	
 	
 	const url = $page.url;
 	let source_country = {value: url.searchParams.get('source'), label: url.searchParams.get('source')};
@@ -134,16 +136,9 @@
 			</Card.Root>
 
 			<Card.Root class="h-1/3 w-full rounded-lg shadow-xl">
-				<Card.Header>
-					<Card.Title>Card Title</Card.Title>
-					<Card.Description>Card Description</Card.Description>
-				</Card.Header>
-				<Card.Content>
-					<p>Card Content</p>
+				<Card.Content class=" h-full overflow-y-scroll">
+					<ResultTable />
 				</Card.Content>
-				<Card.Footer>
-					<p>Card Footer</p>
-				</Card.Footer>
 			</Card.Root>
 		</div>
 	</div>
