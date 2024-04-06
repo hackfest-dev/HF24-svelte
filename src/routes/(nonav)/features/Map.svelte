@@ -8,9 +8,9 @@
 	export let mapOptions: google.maps.MapOptions | null = null;
 	export let data: {} = {};
 
-	let pathCoordinates: { lat: number; lng: number }[] = [];
+	let pathCoordinatesArray: { lat: number; lng: number }[][] = [[]];
 
-	$: pathCoordinates = data?.pathCoordinates ?? [];
+	$: pathCoordinatesArray = data?.pathCoordinatesArray ?? [[]];
 	// $: console.log('Path Coordinates', pathCoordinates);
 
 	const { Loader } = Maps;
@@ -34,26 +34,36 @@
 				...mapOptions
 			});
 
-			if (pathCoordinates != null) {
-				var createPath = async (pathCoordinates: { lat: number; lng: number }[]) => {
-					const flightPath = new google.maps.Polyline({
-						path: pathCoordinates,
-						geodesic: true,
-						strokeColor: '#FF0000',
-						strokeOpacity: 1.0,
-						strokeWeight: 2
-					});
+			pathCoordinatesArray.forEach((pathCoordinates: { lat: number; lng: number }[], index) => {
+				if (pathCoordinates != null) {
+					var createPath = async (pathCoordinates: { lat: number; lng: number }[]) => {
+						const flightPath = new google.maps.Polyline({
+							path: pathCoordinates,
+							geodesic: true,
+							strokeColor: index===0?'#000000':'#FF0000',
+							strokeOpacity: index===0?0.2:1.0,
+							strokeWeight: index===0? 8:2
+						});
 
-					flightPath.setMap(map);
-				};
+						flightPath.setMap(map);
+					};
+					createPath(pathCoordinates);
 
-				createPath(pathCoordinates);
-			}
+					new google.maps.Marker({
+						position: pathCoordinates[0],
+						map,
+					})
+					new google.maps.Marker({
+						position: pathCoordinates[pathCoordinates.length-1],
+						map,
+					})
+				}
+			});
 		});
 	}
 
 	$: {
-		mounted && pathCoordinates && renderMap();
+		mounted && pathCoordinatesArray && renderMap();
 	}
 
 	onMount(() => {
