@@ -8,11 +8,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Icons } from '$lib/icons';
 	import ProfileButton from '$lib/profile/profile-button.svelte';
-<<<<<<< HEAD
-	import { ThemeToggleSwitch } from '$lib/components/theme';
-=======
 	import { ThemeToggleButton } from '$lib/components/theme';
->>>>>>> 856171bd19f5d4bb171ef156c10a3a9c75339e24
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Dialog from "$lib/components/ui/dialog"
 	
