@@ -36,17 +36,16 @@
 	</div>
 
 	<!-- Maps and Results Sections -->
-	<div class="flex h-full gap-4">
+	<div class="flex h-[70vh] gap-4">
 		<!-- The map -->
 		<Map
-			class="h-4/5 w-2/3 rounded-lg border shadow-lg"
+			class=" w-2/3 rounded-lg border shadow-lg"
 			apiKey={PUBLIC_MAPS_API_KEY}
 			bind:data={data.form.data}
 		></Map>
 
 		<!-- Right side results and stats section -->
-		<div class="flex w-1/3 flex-col gap-4">
-			<Card.Root class="w-full rounded-lg shadow-xl">
+			<Card.Root class="h-full overflow-y-scroll rounded-lg shadow-xl flex w-1/3 flex-col gap-4 ">
 				<Card.Header>
 					<Card.Title>Similar Transactions</Card.Title>
 					<Card.Description
@@ -68,12 +67,6 @@
 				<Card.Content>
 					<p>{JSON.stringify(data.form.data?.['gem'])}</p>
 				</Card.Content>
-				<!-- <Card.Footer>
-					<p>Card Footer</p>
-				</Card.Footer> -->
-			</Card.Root>
-
-			<Card.Root class="w-full rounded-lg shadow-xl">
 				<Card.Header>
 					<Card.Title>Charges and Taxes on import</Card.Title>
 					<Card.Description
@@ -81,10 +74,12 @@
 						B</Card.Description
 					>
 				</Card.Header>
-				<Card.Content class="h-full overflow-y-scroll">
+				<Card.Content>
 					<ResultTable />
 				</Card.Content>
+				<!-- <Card.Footer>
+					<p>Card Footer</p>
+				</Card.Footer> -->
 			</Card.Root>
-		</div>
 	</div>
 </div>
