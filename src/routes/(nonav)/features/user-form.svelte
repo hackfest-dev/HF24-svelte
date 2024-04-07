@@ -2,15 +2,24 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
-	import { formSchema, type FormSchema } from './schema';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { formSchema, type FormSchema } from './schema';
 
-	import { browser } from '$app/environment';
-	import SuperDebug from 'sveltekit-superforms';
+	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
+	import { onMount } from 'svelte';
+	import SuperDebug from 'sveltekit-superforms';
 	import CountryCords from './countryCords.json';
-	import { CloudCog } from 'lucide-svelte';
+
+	const url = $page.url;
+	let qp = url.searchParams.get('qp');
+	let source_country = {
+		value: url.searchParams.get('source'),
+		label: url.searchParams.get('source')
+	};
+	let dest_country = { value: url.searchParams.get('dest'), label: url.searchParams.get('dest') };
+	let product = url.searchParams.get('product');
 
 	// import { page } from '$app/stores';
 	// const url = $page.url;
@@ -29,7 +38,7 @@
 
 	const { form: formData, enhance } = form;
 
-	const countries = CountryCords.map((ele)=>ele.name)
+	const countries = CountryCords.map((ele) => ele.name);
 
 	$: selectedSource = $formData.source
 		? {
@@ -79,6 +88,19 @@
 
 		console.log('Submitted');
 	}
+
+	onMount(() => {
+		if (qp) {
+			$formData.dest = dest_country.value;
+			$formData.source = source_country.value;
+			$formData.product = product;
+			handleSubmit();
+			qp = null;
+
+			// $page.query.set('word',word);
+			// history.replaceState(history.state, '', $page.url);
+		}
+	});
 </script>
 
 <!-- Source -->
