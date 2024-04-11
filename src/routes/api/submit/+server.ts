@@ -36,7 +36,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	for (let route in gem2) {
 		let arr = gem2[route];
-		let new_arr = [];
+		let new_arr: {}[] = [];
 		for (let i = 0; i < arr.length; i++) {
 			CountryCords.forEach((ele) => {
 				if (ele.name === arr[i]) {
