@@ -2,12 +2,13 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Drawer from '$lib/components/ui/drawer';
 
-	import SvelteMarkdown from 'svelte-markdown';
 	import { Separator } from '$lib/components/ui/separator';
+	import { Icons } from '$lib/icons';
+	import SvelteMarkdown from 'svelte-markdown';
+	import Map from './Map.svelte';
+	import ResultTable from './ResultTable.svelte';
 	import UserForm from './user-form.svelte';
 	import UserMenu from './user-menu.svelte';
-	import ResultTable from './ResultTable.svelte';
-	import Map from './Map.svelte';
 
 	import { PUBLIC_MAPS_API_KEY } from '$env/static/public';
 
@@ -19,7 +20,7 @@
 
 <div class="flex h-screen flex-col gap-6 px-4 py-6 md:px-16">
 	<!-- Header Section -->
-	<div class="hidden flex-col items-center gap-2 sm:flex sm:flex-row md:gap-6">
+	<div class="hidden w-full flex-col items-center gap-2 sm:flex sm:flex-row md:gap-6">
 		<UserMenu></UserMenu>
 		<Card.Root class="w-full">
 			<!-- <Card.Content class="w-full"> -->
@@ -28,12 +29,14 @@
 		</Card.Root>
 	</div>
 
-	<div class="flex flex-row items-center gap-2 sm:hidden">
+	<div class="flex w-full flex-row items-center gap-2 sm:hidden">
 		<UserMenu></UserMenu>
 		<Drawer.Root>
 			<Drawer.Trigger>
 				<Card.Root class="h-full w-full shadow-lg">
-					<Card.Content class="flex min-w-[40vw] align-middle text-xl">Options</Card.Content>
+					<Card.Content class="flex gap-2 font-bold h-full w-full items-center justify-center p-3 text-sm"
+						><p>Options</p><Icons.pizza /></Card.Content
+					>
 				</Card.Root>
 			</Drawer.Trigger>
 			<Drawer.Content>
@@ -44,7 +47,7 @@
 	</div>
 
 	<!-- Maps and Results Sections -->
-	<div class="flex h-[70vh] flex-col gap-2 sm:flex-row md:gap-4">
+	<div class="flex h-full flex-col gap-2 sm:h-[70vh] sm:flex-row md:gap-4">
 		<!-- The map -->
 		<Map
 			class="h-full w-full rounded-lg border shadow-lg sm:w-2/3"
