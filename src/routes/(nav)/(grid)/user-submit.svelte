@@ -23,10 +23,12 @@
 </script>
 
 <div class="mb-0 flex flex-col items-center justify-center gap-y-10">
-	<div class="mb-0 flex w-full flex-col items-center justify-center gap-x-4 gap-y-4 sm:flex-row px-16">
+	<div
+		class="mb-0 flex w-full flex-col items-center justify-center gap-x-4 gap-y-4 px-16 sm:flex-row"
+	>
 		<Select.Root bind:selected={source_country}>
 			<Select.Trigger
-				class="h-16 w-full max-w-sm justify-center gap-x-2 rounded-full border-2 sm:text-lg text-base"
+				class="h-16 w-full max-w-sm justify-center gap-x-2 rounded-full border-2 text-base sm:text-lg"
 			>
 				<Select.Value placeholder="Source" />
 			</Select.Trigger>
@@ -39,7 +41,7 @@
 
 		<Select.Root bind:selected={dest_country}>
 			<Select.Trigger
-				class="h-16 w-full max-w-sm justify-center gap-x-2 rounded-full border-2 sm:text-lg text-base"
+				class="h-16 w-full max-w-sm justify-center gap-x-2 rounded-full border-2 text-base sm:text-lg"
 			>
 				<Select.Value placeholder="Destination" />
 			</Select.Trigger>
@@ -52,7 +54,7 @@
 
 		<Select.Root bind:selected={product_category}>
 			<Select.Trigger
-				class="h-16 w-full max-w-sm justify-center gap-x-2 rounded-full border-2 sm:text-lg text-base"
+				class="h-16 w-full max-w-sm justify-center gap-x-2 rounded-full border-2 text-base sm:text-lg"
 			>
 				<Select.Value placeholder="Product Category" />
 			</Select.Trigger>
