@@ -17,13 +17,13 @@
 	// let product_hs = url.searchParams.get('product');
 </script>
 
-<Card.Root class="h-full w-fit shadow-lg">
-	<Card.Content class="flex h-full flex-col items-center justify-between px-2 pb-2 ">
+<Card.Root class="h-full sm:w-fit shadow-lg w-full">
+	<Card.Content class="flex h-full flex-row sm:flex-col items-center sm:justify-between justify-around px-2 sm:pb-2 pb-0">
 		<a href="/" class="my-2">
 			<Icons.logoDark class="hidden rounded-full dark:block" />
 			<Icons.logo class="rounded-full dark:hidden" />
 		</a>
-		<Separator />
+		<!-- <Separator  /> -->
 		<ProfileButton />
 		<ThemeToggleButton />
 	</Card.Content>
