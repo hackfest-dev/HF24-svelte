@@ -12,18 +12,9 @@
 
 	import type { PageData } from './$types';
 	export let data: PageData;
-
-	/* ******************************************************** */
-
-	// import { page } from '$app/stores';
-	// const url = $page.url;
-	// let source_country = {
-	// 	value: url.searchParams.get('source'),
-	// 	label: url.searchParams.get('source')
-	// };
-	// let dest_country = { value: url.searchParams.get('dest'), label: url.searchParams.get('dest') };
-	// let product_hs = url.searchParams.get('product');
 </script>
+
+<!-- {JSON.stringify(data)} -->
 
 <div class="flex h-screen flex-col gap-6 px-16 py-6">
 	<!-- Header Section -->
@@ -43,21 +34,21 @@
 		<Map
 			class=" w-2/3 rounded-lg border shadow-lg"
 			apiKey={PUBLIC_MAPS_API_KEY}
-			bind:data={data.form.data}
+			bind:pathCoordinatesArray={data.form.pathCoordinatesArray}
 		></Map>
 
 		<!-- Right side results and stats section -->
 		<Card.Root class="flex h-full w-1/3 flex-col gap-4 overflow-y-scroll rounded-lg shadow-xl ">
 			<Card.Header>
 				<Card.Title>AI Analysis</Card.Title>
-				{#if data?.form?.data?.gem}
+				{#if data?.form?.gem}
 					<Card.Description class="pt-8 text-foreground">
-						<SvelteMarkdown source={data?.form?.data?.gem ?? ``} />
+						<SvelteMarkdown source={data?.form?.gem ?? ``} />
 					</Card.Description>
 				{:else}
 					<Card.Description>
-						Analysis of shipping products from {data?.form?.data.source ?? 'country A'} to {data
-							?.form?.data.dest ?? 'country B'} using AI
+						Analysis of shipping products from {data?.form?.source ?? 'country A'} to {data?.form
+							?.dest ?? 'country B'} using AI
 					</Card.Description>
 				{/if}
 			</Card.Header>
@@ -67,12 +58,12 @@
 			<Card.Header>
 				<Card.Title>Charges and Taxes on import</Card.Title>
 				<Card.Description>
-					Estimate of various taxes and duties in shipping your product from {data?.form?.data
-						.source ?? 'country A'} to {data?.form?.data.dest ?? 'country B'}
+					Estimate of various taxes and duties in shipping your product from {data?.form?.source ??
+						'country A'} to {data?.form?.dest ?? 'country B'}
 				</Card.Description>
-				{#if data?.form?.data?.gem}
+				{#if data?.form?.gem}
 					<Card.Content>
-						<ResultTable formData={data.form.data} />
+						<ResultTable data={data.form.data} />
 					</Card.Content>
 				{/if}
 			</Card.Header>
@@ -82,19 +73,10 @@
 			<Card.Header>
 				<Card.Title>Similar Transactions</Card.Title>
 				<Card.Description>
-					Here are some of the matching transactions from {data?.form?.data.source ?? 'country A'} to
-					{data?.form?.data.dest ?? 'country B'} of the product category X
+					Here are some of the matching transactions from {data?.form?.source ?? 'country A'} to
+					{data?.form?.dest ?? 'country B'} of the product category X
 				</Card.Description>
 			</Card.Header>
-			<!-- <Card.Content>
-				<p>Content</p>
-				<p>Content</p>
-				<p>Content</p>
-			</Card.Content> -->
-
-			<!-- <Card.Footer>
-					<p>Card Footer</p>
-				</Card.Footer> -->
 		</Card.Root>
 	</div>
 </div>
