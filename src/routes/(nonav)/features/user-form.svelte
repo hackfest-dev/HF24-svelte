@@ -1,75 +1,59 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import { Input } from '$lib/components/ui/input';
-	import * as Select from '$lib/components/ui/select';
-	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { formSchema, type FormSchema } from './schema';
-
+	import { replaceState } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
-	import { onMount } from 'svelte';
-	import SuperDebug from 'sveltekit-superforms';
+	import { Input } from '$lib/components/ui/input';
+	import { Label } from '$lib/components/ui/label';
+	import * as Select from '$lib/components/ui/select';
 	import CountryCords from './countryCords.json';
+	import { onMount } from 'svelte';
 
-	const url = $page.url;
-	let qp = url.searchParams.get('qp');
-	let source_country = {
-		value: url.searchParams.get('source'),
-		label: url.searchParams.get('source')
+	export let data: {
+		source: string;
+		dest: string;
+		product: string;
+		qp: string;
+		gem: string;
+		pathCoordinatesArray: any;
+		data: any;
 	};
-	let dest_country = { value: url.searchParams.get('dest'), label: url.searchParams.get('dest') };
-	let product = url.searchParams.get('product');
-
-	// import { page } from '$app/stores';
-	// const url = $page.url;
-	// let source_country = {
-	// 	value: url.searchParams.get('source'),
-	// 	label: url.searchParams.get('source')
-	// };
-	// let dest_country = { value: url.searchParams.get('dest'), label: url.searchParams.get('dest') };
-	// let product_hs = url.searchParams.get('product');
-
-	export let data: SuperValidated<Infer<FormSchema>>;
-
-	const form = superForm(data, {
-		validators: zodClient(formSchema)
-	});
-
-	const { form: formData, enhance } = form;
 
 	const countries = CountryCords.map((ele) => ele.name);
 
-	$: selectedSource = $formData.source
-		? {
-				label: $formData.source,
-				value: $formData.source
-			}
-		: undefined;
+	let source: { value: string; label?: string; disabled?: boolean };
+	let dest: { value: string; label?: string; disabled?: boolean };
+	let product: string;
 
-	$: selectedDestination = $formData.dest
-		? {
-				label: $formData.dest,
-				value: $formData.dest
-			}
-		: undefined;
+	onMount(() => {
+		console.log(data);
 
-	$: selectedProduct = $formData.product
-		? {
-				label: $formData.product,
-				value: $formData.product
-			}
-		: undefined;
+		source = {
+			value: data.source,
+			label: data.source
+		};
+
+		dest = {
+			value: data.dest,
+			label: data.dest
+		};
+
+		product = data.product ?? '';
+
+		if (data.qp === 'true') {
+			data.qp = 'false';
+			$page.url.searchParams.set('qp', 'false');
+			replaceState($page.url, { replace: true });
+			handleSubmit();
+		}
+	});
 
 	function handleSubmit() {
-		// console.log('Form Data', $formData);
-
 		fetch('/api/submit', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify($formData)
+			body: JSON.stringify(data)
 		})
 			.then((response) => {
 				if (response.ok) {
@@ -79,104 +63,62 @@
 				}
 			})
 			.then((responseData) => {
-				// console.log('response data', responseData); // Use the JSON data here
-				// console.log('data object', data);
+				console.log('response data', responseData); // Use the JSON data here
 
-				data.data = responseData;
+				data.gem = responseData.gem;
+				data.pathCoordinatesArray = responseData.pathCoordinatesArray;
+				data.data = responseData.data;
 			})
 			.catch((error) => console.error('Error submitting form:', error));
 
 		console.log('Submitted');
 	}
 
-	onMount(() => {
-		if (qp) {
-			$formData.dest = dest_country.value;
-			$formData.source = source_country.value;
-			$formData.product = product;
-			handleSubmit();
-			qp = null;
-
-			// $page.query.set('word',word);
-			// history.replaceState(history.state, '', $page.url);
-		}
-	});
+	$: data.source = source?.value ?? data.source;
+	$: data.dest = dest?.value ?? data.dest;
+	$: data.product = product ?? data.product;
 </script>
 
-<!-- Source -->
+<!-- {JSON.stringify(dest)}
+{JSON.stringify(source)}
+{JSON.stringify(product)} -->
+
 <div class="flex items-center justify-between rounded-lg p-8 px-20 shadow-lg">
-	<Form.Field {form} name="source" class="flex flex-col gap-1">
-		<Form.Control let:attrs>
-			<Form.Label class="text-xl font-semibold">Source</Form.Label>
-			<!-- <Form.Description>Select your source country</Form.Description> -->
+	<div class="flex flex-col gap-1">
+		<Label class="text-xl font-semibold">Source</Label>
+		<Select.Root bind:selected={source}>
+			<Select.Trigger class="h-8 min-w-40 border-2">
+				<Select.Value placeholder="Choose source country" />
+			</Select.Trigger>
 
-			<Select.Root
-				selected={selectedSource}
-				onSelectedChange={(v) => {
-					v && ($formData.source = v.value) && (data.data.source = v.value);
-				}}
-			>
-				<Select.Trigger {...attrs} class="h-8 min-w-40 border-2">
-					<Select.Value placeholder="Choose source country" />
-				</Select.Trigger>
+			<Select.Content class="h-[75dvh] overflow-y-scroll">
+				{#each countries as country}
+					<Select.Item value={country} label={country}>{country}</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+	</div>
 
-				<Select.Content class="h-[75dvh] overflow-y-scroll">
-					{#each countries as country}
-						<Select.Item value={country} label={country}>{country}</Select.Item>
-					{/each}
-				</Select.Content>
-			</Select.Root>
+	<div class="flex flex-col gap-1">
+		<Label class="text-xl font-semibold">Destination</Label>
 
-			<input hidden bind:value={$formData.source} name={attrs.name} />
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
+		<Select.Root bind:selected={dest}>
+			<Select.Trigger class="h-8 min-w-40 border-2">
+				<Select.Value placeholder="Choose dest country" />
+			</Select.Trigger>
 
-	<!-- Destination -->
-	<Form.Field {form} name="dest" class="flex flex-col gap-1">
-		<Form.Control let:attrs>
-			<Form.Label class="text-xl font-semibold">Destination</Form.Label>
-			<!-- <Form.Description>Select your source country</Form.Description> -->
+			<Select.Content class="h-[75dvh] overflow-y-scroll">
+				{#each countries as country}
+					<Select.Item value={country} label={country}>{country}</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+	</div>
 
-			<Select.Root
-				selected={selectedDestination}
-				onSelectedChange={(v) => {
-					v && ($formData.dest = v.value) && (data.data.dest = v.value);
-				}}
-			>
-				<Select.Trigger {...attrs} class="h-8 min-w-40 border-2">
-					<Select.Value placeholder="Choose dest country" />
-				</Select.Trigger>
-
-				<Select.Content class="h-[75dvh] overflow-y-scroll">
-					{#each countries as country}
-						<Select.Item value={country} label={country}>{country}</Select.Item>
-					{/each}
-				</Select.Content>
-			</Select.Root>
-
-			<input hidden bind:value={$formData.dest} name={attrs.name} />
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
-
-	<!-- Product -->
-	<Form.Field {form} name="product" class="flex flex-col gap-1">
-		<Form.Control let:attrs>
-			<Form.Label class="text-xl font-semibold">Product</Form.Label>
-			<Input
-				{...attrs}
-				bind:value={$formData.product}
-				class="h-8 border-2"
-				placeholder="Enter HS Code"
-			/>
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
+	<div class="flex flex-col gap-1">
+		<Label class="text-xl font-semibold">Product</Label>
+		<Input bind:value={product} class="h-8 border-2" placeholder="Enter HS Code" />
+	</div>
 
 	<Button class="h-14 w-28 rounded-lg" on:click={handleSubmit}>Submit</Button>
 </div>
-
-<!-- {#if browser}
-	<SuperDebug data={$formData} />
-{/if} -->
