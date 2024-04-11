@@ -16,9 +16,9 @@
 
 <!-- {JSON.stringify(data)} -->
 
-<div class="flex h-screen flex-col gap-6 px-16 py-6">
+<div class="flex h-screen flex-col gap-6 md:px-16 px-4 py-6">
 	<!-- Header Section -->
-	<div class="flex items-center gap-6">
+	<div class="flex flex-col sm:flex-row items-center md:gap-6 gap-2">
 		<UserMenu></UserMenu>
 
 		<Card.Root class="w-full">
@@ -29,16 +29,16 @@
 	</div>
 
 	<!-- Maps and Results Sections -->
-	<div class="flex h-[70vh] gap-4">
+	<div class="flex flex-col sm:flex-row h-[70vh] md:gap-4 gap-2">
 		<!-- The map -->
 		<Map
-			class=" w-2/3 rounded-lg border shadow-lg"
+			class="sm:w-2/3 h-full rounded-lg border shadow-lg w-full"
 			apiKey={PUBLIC_MAPS_API_KEY}
 			bind:pathCoordinatesArray={data.form.pathCoordinatesArray}
 		></Map>
 
 		<!-- Right side results and stats section -->
-		<Card.Root class="flex h-full w-1/3 flex-col gap-4 overflow-y-scroll rounded-lg shadow-xl ">
+		<Card.Root class="flex h-full sm:w-1/3 w-full flex-col gap-4 overflow-y-scroll rounded-lg shadow-xl ">
 			<Card.Header>
 				<Card.Title>AI Analysis</Card.Title>
 				{#if data?.form?.gem}

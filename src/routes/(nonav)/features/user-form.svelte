@@ -5,8 +5,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import * as Select from '$lib/components/ui/select';
-	import CountryCords from './countryCords.json';
 	import { onMount } from 'svelte';
+	import CountryCords from './countryCords.json';
 
 	export let data: {
 		source: string;
@@ -83,42 +83,49 @@
 {JSON.stringify(source)}
 {JSON.stringify(product)} -->
 
-<div class="flex items-center justify-between rounded-lg p-8 px-20 shadow-lg">
-	<div class="flex flex-col gap-1">
-		<Label class="text-xl font-semibold">Source</Label>
-		<Select.Root bind:selected={source}>
-			<Select.Trigger class="h-8 min-w-40 border-2">
-				<Select.Value placeholder="Choose source country" />
-			</Select.Trigger>
+<div
+	class="flex flex-col items-center justify-between gap-2 rounded-lg p-8 shadow-lg sm:flex-row sm:gap-4 sm:py-8 lg:px-20"
+>
+	<div class="flex w-full flex-col justify-around gap-2 sm:w-1/2 lg:flex-row lg:items-center">
+		<div class="flex flex-col gap-1">
+			<Label class="text-xl font-semibold">Source</Label>
+			<Select.Root bind:selected={source}>
+				<Select.Trigger class="h-8 min-w-40 border-2">
+					<Select.Value placeholder="Choose source country" />
+				</Select.Trigger>
 
-			<Select.Content class="h-[75dvh] overflow-y-scroll">
-				{#each countries as country}
-					<Select.Item value={country} label={country}>{country}</Select.Item>
-				{/each}
-			</Select.Content>
-		</Select.Root>
+				<Select.Content class="h-[75dvh] overflow-y-scroll">
+					{#each countries as country}
+						<Select.Item value={country} label={country}>{country}</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
+		</div>
+
+		<div class="flex flex-col gap-1">
+			<Label class="text-xl font-semibold">Destination</Label>
+
+			<Select.Root bind:selected={dest}>
+				<Select.Trigger class="h-8 min-w-40 border-2">
+					<Select.Value placeholder="Choose dest country" />
+				</Select.Trigger>
+
+				<Select.Content class="h-[75dvh] overflow-y-scroll">
+					{#each countries as country}
+						<Select.Item value={country} label={country}>{country}</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
+		</div>
 	</div>
 
-	<div class="flex flex-col gap-1">
-		<Label class="text-xl font-semibold">Destination</Label>
+	<div class="flex w-full flex-col justify-around gap-2 sm:w-1/2 lg:flex-row lg:items-center">
+		<div class="flex w-full flex-col gap-1 place-self-start lg:w-auto">
+			<Label class="text-xl font-semibold">Product</Label>
+			<Input bind:value={product} class="h-8 border-2" placeholder="Enter HS Code" />
+		</div>
 
-		<Select.Root bind:selected={dest}>
-			<Select.Trigger class="h-8 min-w-40 border-2">
-				<Select.Value placeholder="Choose dest country" />
-			</Select.Trigger>
-
-			<Select.Content class="h-[75dvh] overflow-y-scroll">
-				{#each countries as country}
-					<Select.Item value={country} label={country}>{country}</Select.Item>
-				{/each}
-			</Select.Content>
-		</Select.Root>
+		<Button class="h-14 w-full rounded-lg p-8 lg:w-28 lg:p-0" on:click={handleSubmit}>Submit</Button
+		>
 	</div>
-
-	<div class="flex flex-col gap-1">
-		<Label class="text-xl font-semibold">Product</Label>
-		<Input bind:value={product} class="h-8 border-2" placeholder="Enter HS Code" />
-	</div>
-
-	<Button class="h-14 w-28 rounded-lg" on:click={handleSubmit}>Submit</Button>
 </div>
