@@ -6,12 +6,8 @@
 	export let apiKey: string;
 	export let loaderOptions: Omit<LoaderOptions, 'apiKey'> | null = null;
 	export let mapOptions: google.maps.MapOptions | null = null;
-	export let data: {} = {};
-
-	let pathCoordinatesArray: { lat: number; lng: number }[][] = [[]];
-
-	$: pathCoordinatesArray = data?.pathCoordinatesArray ?? [[]];
-	// $: console.log('Path Coordinates', pathCoordinates);
+	export let pathCoordinatesArray: { lat: number; lng: number }[][] = [[]];
+	let previousPathCoordinatesArray: { lat: number; lng: number }[][] = [[]];
 
 	const { Loader } = Maps;
 
@@ -91,7 +87,8 @@
 	}
 
 	$: {
-		mounted && pathCoordinatesArray && renderMap();
+		mounted && pathCoordinatesArray != previousPathCoordinatesArray && renderMap();
+		previousPathCoordinatesArray = pathCoordinatesArray;
 	}
 
 	onMount(() => {
@@ -103,6 +100,8 @@
 		});
 
 		renderMap();
+
+		previousPathCoordinatesArray = pathCoordinatesArray;
 	});
 </script>
 

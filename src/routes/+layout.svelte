@@ -7,5 +7,4 @@
 	$user;
 </script>
 
-
-	<slot />
+<slot />
